@@ -4,6 +4,8 @@ const app = express()
 const {connectMongoDB} = require('./config/mongodb.js')
 const port = process.env.PORT || 4001
 
+const errHandler = require('./middlewares/errHandler.js')
+
 const router = require('./routes/index.js')
 
 connectMongoDB((connect) => {
@@ -17,8 +19,9 @@ connectMongoDB((connect) => {
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-app.get('/', router)
+app.use('/movies', router)
+app.use(errHandler)
 
 app.listen(port, () => {
-  console.log('this app is running on port: ' + port)
+  console.log('Movies App is running on port: ' + port)
 })
