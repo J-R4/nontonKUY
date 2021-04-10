@@ -6,7 +6,6 @@ class MovieController {
   static readM = async (req, res, next) => {
     try {
       const mvData = await redis.get('movies:data')
-
       if (mvData) {
         const data = JSON.parse(mvData)
         res.status(200).json(data)
@@ -23,8 +22,10 @@ class MovieController {
 
   static createM = async (req, res, next) => {
     try {
-      redis.del('movies:data')
+      console.log('masuk createM')
+      await redis.del('movies:data')
       const mv = await Movie.create(req.body)
+      console.log(mv,'<<<<<<<<')
       res.status(201).json(mv)
     } catch (err) {
       next(err)
@@ -33,6 +34,7 @@ class MovieController {
 
   static readOneM = async (req, res, next) => {
     try {
+      console.log(req.params.id)
       const mv = await Movie.readOne(req.params.id)
       res.status(200).json(mv)
     } catch (err) {
@@ -42,7 +44,7 @@ class MovieController {
 
   static updateM = async (req, res, next) => {
     try {
-      redis.del('movies:data')
+      await redis.del('movies:data')
       const updateMv = await Movie.update(req.params.id, req.body)
       res.status(200).json(updateMv)
     } catch (err) {
@@ -52,7 +54,8 @@ class MovieController {
 
   static deleteM = async (req, res, next) => {
     try {
-      redis.del('movies:data')
+      await redis.del('movies:data')
+      console.log(req.params.id)
       const mv = await Movie.delete(req.params.id)
       res.status(200).json(mv)
     } catch (err) {

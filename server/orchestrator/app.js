@@ -37,7 +37,7 @@ const typeDefs = gql`
     createSeries(title: String, overview: String, poster_path: String, popularity: Float, tags: [String]): Series
     editMovie(id: ID, title: String, overview: String, poster_path: String, popularity: Float, tags: [String]): Movie
     editSeries(id: ID, title: String, overview: String, poster_path: String, popularity: Float, tags: [String]): Series
-    deleteMovie(id: ID): Movie
+    deleteMovie(_id: ID): Movie
     deleteSeries(id: ID): Series
   }
 `
@@ -50,6 +50,7 @@ const resolvers = {
         if (mvData) {
           return mvData
         } else {
+          console.log('else <<<<<<<<<')
           const { data } = await axios({
             method: 'get',
             url: mvBaseURL

@@ -39,7 +39,7 @@ class Series{
   static readOne(id) {
     return getDatabase()
       .collection('series')
-      .readOne({_id: ObjectId(id)})
+      .findOne({_id: ObjectId(id)})
   }
 }
 

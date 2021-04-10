@@ -39,7 +39,7 @@ class Movie{
   static readOne(id) {
     return getDatabase()
       .collection('movies')
-      .readOne({_id: ObjectId(id)})
+      .findOne({_id: ObjectId(id)})
   }
 }
 

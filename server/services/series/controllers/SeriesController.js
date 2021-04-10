@@ -23,7 +23,7 @@ class SeriesController {
 
   static createS = async (req, res, next) => {
     try {
-      redis.del('series:data')
+      await redis.del('series:data')
       const s = await Series.create(req.body)
       res.status(201).json(s)
     } catch (err) {
@@ -42,7 +42,7 @@ class SeriesController {
 
   static updateS = async (req, res, next) => {
     try {
-      redis.del('series:data')
+      await redis.del('series:data')
       const updates = await Series.update(req.params.id, req.body)
       res.status(200).json(updates)
     } catch (err) {
@@ -52,7 +52,7 @@ class SeriesController {
 
   static deleteS = async (req, res, next) => {
     try {
-      redis.del('series:data')
+      await redis.del('series:data')
       const s = await Series.delete(req.params.id)
       res.status(200).json(s)
     } catch (err) {
