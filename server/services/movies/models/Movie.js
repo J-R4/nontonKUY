@@ -1,4 +1,4 @@
-const { ObjectId } = require('bson')
+const { ObjectId } = require('mongodb')
 const { getDatabase } = require('../config/mongodb')
 
 class Movie{

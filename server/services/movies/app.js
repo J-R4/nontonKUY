@@ -8,14 +8,6 @@ const errHandler = require('./middlewares/errHandler.js')
 
 const router = require('./routes/index.js')
 
-connectMongoDB((connect) => {
-  if (connect) {
-    console.log('mongodb successfully connected !')
-  } else {
-    console.log('error in mongodb connecting !')
-  }
-})
-
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
@@ -24,4 +16,12 @@ app.use(errHandler)
 
 app.listen(port, () => {
   console.log('Movies App is running on port: ' + port)
+})
+
+connectMongoDB((connect) => {
+  if (connect) {
+    console.log('mongodb successfully connected !')
+  } else {
+    console.log('error in mongodb connecting !')
+  }
 })

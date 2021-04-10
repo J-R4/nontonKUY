@@ -3,7 +3,7 @@ const Redis = require('ioredis')
 const redis = new Redis()
 
 const mvBaseURL = `http://localhost:4001/movies`
-const tvBaseURL = `http://localhost:4002/tv`
+const tvBaseURL = `http://localhost:4002/series`
 
 class MvController {
   static readM = async (req, res, next) => {
