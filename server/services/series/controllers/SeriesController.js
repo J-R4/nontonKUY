@@ -25,7 +25,7 @@ class SeriesController {
     try {
       await redis.del('series:data')
       const s = await Series.create(req.body)
-      res.status(201).json(s)
+      res.status(201).json(s.ops[0])
     } catch (err) {
       next(err)
     }
@@ -44,7 +44,7 @@ class SeriesController {
     try {
       await redis.del('series:data')
       const updates = await Series.update(req.params.id, req.body)
-      res.status(200).json(updates)
+      res.status(200).json({message: 'Update Successfully !'})
     } catch (err) {
       next(err)
     }
@@ -54,7 +54,7 @@ class SeriesController {
     try {
       await redis.del('series:data')
       const s = await Series.delete(req.params.id)
-      res.status(200).json(s)
+      res.status(200).json({message: 'Delete Successfully !'})
     } catch (err) {
       next(err)
     }
