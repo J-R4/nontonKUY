@@ -1,5 +1,6 @@
 const { ApolloServer, gql } = require("apollo-server")
-const resolvers = require('./resolver.js')
+const mv = require('./resolvers/movies.js')
+const s = require('./resolvers/series.js')
 
 const typeDefs = gql`
   type Movie {
@@ -45,7 +46,7 @@ const typeDefs = gql`
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers: [mv,s]
 })
 
 server.listen().then(({ url }) => {

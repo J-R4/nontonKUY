@@ -141,7 +141,7 @@ const resolvers = {
         })
         return data
       } catch(err) {
-        throw err
+        console.log(err)
       }
     },
     deleteMovie: async(_, args) => {
@@ -155,18 +155,22 @@ const resolvers = {
         })
         return data
       } catch (err) {
-        throw err
+        console.log(err)
       }
     },
-    deleteSeries: async(_, args) => {
-      await redis.del('series:data')
-      await redis.del('seriesDetail:data')
-      const { id } = args
-      const {data} = await axios({
-        method: 'delete',
-        url: tvBaseURL + id
-      })
-      return data
+    deleteSeries: async (_, args) => {
+      try {
+        await redis.del('series:data')
+        await redis.del('seriesDetail:data')
+        const { id } = args
+        const {data} = await axios({
+          method: 'delete',
+          url: tvBaseURL + id
+        })
+        return data
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }
