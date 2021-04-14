@@ -26,7 +26,7 @@ const MovieCard = (props) => {
               {movie.overview}
             </p>
             <p className="subtitle is-7">
-              Popularity : {movie.popularity}
+              {movie.popularity} / 5
             </p>
             <p className="subtitle is-7">
               tags : {movie.tags}
@@ -34,17 +34,17 @@ const MovieCard = (props) => {
           </div>
           <nav className="level is-mobile">
             <div className="level-left">
-              <a className="level-item" aria-label="reply">
+              <a className="level-item">
                 <span className="icon is-small">
                   <i className="fas fa-trash" aria-hidden="true"></i>
                 </span>
               </a>
-              <a className="level-item" aria-label="retweet">
+              <a className="level-item">
                 <span className="icon is-small">
                   <i className="fas fa-edit" aria-hidden="true"></i>
                 </span>
               </a>
-              <a className="level-item" aria-label="like">
+              <a className="level-item">
                 <span className="icon is-small">
                   <i className="fas fa-heart" aria-hidden="true"></i>
                 </span>

@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
-import { MovieCard, SeriesCard } from '../components/index.js'
+import { MovieCard, SeriesCard, AddMovie } from '../components/index.js'
+import { Link } from 'react-router-dom'
 
 const Home = () => {
 
@@ -23,6 +24,7 @@ const Home = () => {
   }
 }
 `
+
   const { loading, error, data } = useQuery(GET_ALL_DATA);
   if (loading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
@@ -36,6 +38,28 @@ const Home = () => {
         <div className="columns is-centered" style={{ marginTop: "20px" }}>
           <img className="" src="https://silverandgold.s3-ap-southeast-1.amazonaws.com/NONTONKUY.png" alt="NK Logo" width="200px" height="500px" />
         </div>
+        <nav className="level is-mobile">
+          <div>
+            <Link to="/addMovie">
+              <a className="level-item" aria-label="reply">
+                <span className="icon is-small">
+                  <i className="fas fa-eye" aria-hidden="true"></i>
+                </span>
+                Add Movie
+                </a>
+            </Link>
+          </div>
+          <div>
+            <Link to="/favorites">
+              <a className="level-item" aria-label="retweet">
+                <span className="icon is-small">
+                  <i className="fas fa-heart" aria-hidden="true"></i>
+                </span>
+                  Favourites
+                </a>
+            </Link>
+          </div>
+        </nav>
         <div className="columns is-centered">
           <div className="column" style={{ marginLeft: "150px" }}>
             <p className="title is-4">
