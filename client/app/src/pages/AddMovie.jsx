@@ -1,43 +1,76 @@
 import React, { useState } from 'react'
-import { gql, useQuery } from '@apollo/client';
-import { Link } from 'react-router-dom'
+import { gql, useMutation } from '@apollo/client';
+import { Link, useHistory } from 'react-router-dom'
 
 const AddMovie = () => {
   const [title, setTitle] = useState('')
   const [overview, setOverview] = useState('')
   const [poster, setPoster] = useState('')
-  const [popularity, setPopularity] = useState('')
+  const [popularity, setPopularity] = useState(0)
   const [tags, setTags] = useState('')
+  const history = useHistory();
+
+  const CREATE_MOVIE = gql`
+    mutation createMovie($title: String!, $overview: String!, $poster_path: String!, $popularity: Float!, $tags: [String]! ) {
+    createMovie
+    (
+      title: $title
+      overview: $overview
+      poster_path: $poster_path
+      popularity: $popularity
+      tags: $tags
+    )
+    {
+      _id
+    }
+  }
+  `
+
+  const GET_ALL_DATA = gql`
+  query getAllData{
+  movies{
+    _id
+    title
+    overview
+    poster_path
+    popularity
+    tags
+  }
+  series{
+    _id
+    title
+    overview
+    poster_path
+    popularity
+    tags
+  }
+}
+`
+
+  const [addMovie] = useMutation(CREATE_MOVIE, {
+    refetchQueries: [{ query: GET_ALL_DATA }]
+  });
 
   const SubmitMovie = (event) => {
     event.preventDefault()
 
-    const CREATE_MOVIE = gql`
-    mutation createMovie{
-    createMovie
-    (
-      title: ${title}
-      overview: ${overview}
-      poster_path: ${poster}
-      popularity: ${popularity}
-      tags: [${tags}]
-    )
-    {
-      title
-      overview
-      poster_path
-      popularity
-      tags
+    addMovie({
+      variables: {
+        title: title,
+        overview: overview,
+        poster_path: poster,
+        popularity: parseFloat(popularity),
+        tags: tags
+      }
     }
-  }
-  `
-    useQuery(CREATE_MOVIE);
+    )
 
     setTitle('')
     setOverview('')
     setPoster('')
-    setPopularity('')
+    setPopularity(0)
     setTags('')
+    history.push('/')
   }
 
   const ChangeTitle = (event) => {
@@ -57,7 +90,7 @@ const AddMovie = () => {
   }
 
   const ChangeTags = (event) => {
-    setTags(event.target.value)
+    setTags(event.target.value.split(','))
   }
 
   return (
@@ -99,7 +132,7 @@ const AddMovie = () => {
             <div className="control has-icons-left">
               <input className="input" type="text" placeholder="Soul is a disney movie" onChange={ChangeOverview} />
               <span className="icon is-small is-left">
-                <i className="fas fa-link"></i>
+                <i className="fas fa-book"></i>
               </span>
             </div>
           </div>
@@ -111,7 +144,7 @@ const AddMovie = () => {
             <div className="control has-icons-left">
               <input className="input" type="text" placeholder="unsplash.com/1237812" onChange={ChangePoster} />
               <span className="icon is-small is-left">
-                <i className="fas fa-image"></i>
+                <i className="fas fa-link"></i>
               </span>
             </div>
           </div>
@@ -123,7 +156,7 @@ const AddMovie = () => {
             <div className="control has-icons-left">
               <input className="input" type="text" placeholder="5" onChange={ChangePopularity} />
               <span className="icon is-small is-left">
-                <i className="fas fa-number"></i>
+                <i className="fas fa-star"></i>
               </span>
             </div>
           </div>
@@ -139,17 +172,15 @@ const AddMovie = () => {
               </span>
             </div>
           </div>
-          <Link to="/">
-            <button
-              type="submit"
-              className="button is-black"
-            >Add Movie</button>
-          </Link>
+          <button
+            type="submit"
+            className="button is-black"
+          >Add Movie</button>
           <Link to="/">
             <button
               id="link-register-reg"
               className="button is-white"
-              style="border-color:grey;"
+              style={{ borderColor: "grey" }}
             >
               Cancel
             </button>

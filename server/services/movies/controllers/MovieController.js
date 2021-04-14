@@ -32,6 +32,7 @@ class MovieController {
 
   static readOneM = async (req, res, next) => {
     try {
+      redis.del('movie:data')
       const mv = await Movie.readOne(req.params.id)
       res.status(200).json(mv)
     } catch (err) {

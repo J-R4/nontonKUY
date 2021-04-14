@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {
-  Home, MovieDetail, SeriesDetail, AddMovie, EditMovie, Favorites
+  Home, AddMovie, EditMovie, Favorites
 } from './pages/index.js'
 
 import {
@@ -19,12 +19,6 @@ function App() {
       <Switch>
         <Route exact path="/">
           <Home/>
-        </Route>
-        <Route path="/movie/detail/:id">
-          <MovieDetail/>
-        </Route>
-        <Route path="/series/detail/:id">
-          <SeriesDetail/>
         </Route>
         <Route path="/addMovie">
           <AddMovie/>

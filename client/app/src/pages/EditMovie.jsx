@@ -1,39 +1,114 @@
-import React, { useState } from 'react'
-import { gql, useQuery } from '@apollo/client';
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { gql, useQuery, useMutation } from '@apollo/client';
+import {
+  useHistory,
+  Link,
+  useParams
+} from "react-router-dom";
 
 const EditMovie = () => {
   const [title, setTitle] = useState('')
   const [overview, setOverview] = useState('')
   const [poster, setPoster] = useState('')
-  const [popularity, setPopularity] = useState('')
+  const [popularity, setPopularity] = useState(0)
   const [tags, setTags] = useState('')
+  const history = useHistory();
+  const { id } = useParams()
 
-  const SubmitMovie = (event) => {
-    event.preventDefault()
+  const EDIT_MOVIE = gql`
+    mutation editMovie($id: ID, $title: String!, $overview: String!, $poster_path: String!, $popularity: Float!, $tags: [String]! ) {
+    editMovie
+    (
+      id: $id
+      title: $title
+      overview: $overview
+      poster_path: $poster_path
+      popularity: $popularity
+      tags: $tags
+    )
+    {
+      message
+    }
+  }
+  `
 
-    const EDIT_MOVIE = gql`
-    mutation editMovie{
-      editMovie
-      (
-        title: ${title}
-        overview: ${overview}
-        poster_path: ${poster}
-        popularity: ${popularity}
-        tags: [${tags}]
-      )
-      {
-        message
+  const GET_MOVIE = gql`
+    query Movie($id: ID) {
+      movie(id: $id) {
+        _id
+        title
+        overview
+        poster_path
+        popularity
+        tags
       }
     }
   `
-    useQuery(EDIT_MOVIE);
+
+  const GET_ALL_DATA = gql`
+  query getAllData{
+  movies{
+    _id
+    title
+    overview
+    poster_path
+    popularity
+    tags
+  }
+  series{
+    _id
+    title
+    overview
+    poster_path
+    popularity
+    tags
+  }
+}
+`
+  const [editMovie] = useMutation(EDIT_MOVIE, {
+    refetchQueries: [{ query: GET_ALL_DATA }]
+  });
+
+  const { loading, error, data } = useQuery(GET_MOVIE, {
+    variables: {
+      id
+    }
+  });
+
+  useEffect(() => {
+    if (data) {
+      setTitle(data.movie.title)
+      setOverview(data.movie.overview)
+      setPoster(data.movie.poster_path)
+      setPopularity(data.movie.popularity)
+      setTags(data.movie.tags)
+    }
+  }, [data])
+
+  if (loading) return 'Loading...';
+  if (error) return `Error! ${error.message}`;
+
+  const SubmitMovie = (event) => {
+    event.preventDefault()
+    console.log(id, title, overview, poster, popularity, tags, 'M<<<<<<<<<<<')
+    editMovie({
+      variables: {
+        id: id,
+        title: title,
+        overview: overview,
+        poster_path: poster,
+        popularity: parseFloat(popularity),
+        tags: tags
+      }
+    }
+    )
 
     setTitle('')
     setOverview('')
     setPoster('')
-    setPopularity('')
+    setPopularity(0)
     setTags('')
+    history.push('/')
   }
 
   const ChangeTitle = (event) => {
@@ -53,7 +128,7 @@ const EditMovie = () => {
   }
 
   const ChangeTags = (event) => {
-    setTags(event.target.value)
+    setTags(event.target.value.split(','))
   }
 
   return (
@@ -73,7 +148,7 @@ const EditMovie = () => {
           }}>
           <div>
             <p style={{ margin: "0px 0px 10px 0px" }}>
-              Add Movie
+              Edit Movie
             </p>
           </div>
           <div className="field">
@@ -81,7 +156,7 @@ const EditMovie = () => {
               Title
             </label>
             <div className="control has-icons-left">
-              <input className="input" type="text" placeholder="Soul" onChange={ChangeTitle} />
+              <input value={title} className="input" type="text" placeholder="Soul" onChange={ChangeTitle} />
               <span className="icon is-small is-left">
                 <i className="fas fa-prescription-bottle"></i>
               </span>
@@ -93,9 +168,9 @@ const EditMovie = () => {
               Overview
             </label>
             <div className="control has-icons-left">
-              <input className="input" type="text" placeholder="Soul is a disney movie" onChange={ChangeOverview} />
+              <input value={overview} className="input" type="text" placeholder="Soul is a disney movie" onChange={ChangeOverview} />
               <span className="icon is-small is-left">
-                <i className="fas fa-link"></i>
+                <i className="fas fa-book"></i>
               </span>
             </div>
           </div>
@@ -105,9 +180,9 @@ const EditMovie = () => {
               Poster
             </label>
             <div className="control has-icons-left">
-              <input className="input" type="text" placeholder="unsplash.com/1237812" onChange={ChangePoster} />
+              <input value={poster} className="input" type="text" placeholder="unsplash.com/1237812" onChange={ChangePoster} />
               <span className="icon is-small is-left">
-                <i className="fas fa-image"></i>
+                <i className="fas fa-link"></i>
               </span>
             </div>
           </div>
@@ -117,9 +192,9 @@ const EditMovie = () => {
               Popularity
             </label>
             <div className="control has-icons-left">
-              <input className="input" type="text" placeholder="5" onChange={ChangePopularity} />
+              <input value={popularity} className="input" type="text" placeholder="5" onChange={ChangePopularity} />
               <span className="icon is-small is-left">
-                <i className="fas fa-number"></i>
+                <i className="fas fa-star"></i>
               </span>
             </div>
           </div>
@@ -129,23 +204,21 @@ const EditMovie = () => {
               Tags
             </label>
             <div className="control has-icons-left">
-              <input className="input" type="text" placeholder="Adventure" onChange={ChangeTags} />
+              <input value={tags} className="input" type="text" placeholder="Adventure" onChange={ChangeTags} />
               <span className="icon is-small is-left">
                 <i className="fas fa-list"></i>
               </span>
             </div>
           </div>
-          <Link to="/">
-            <button
-              type="submit"
-              className="button is-black"
-            >Add Movie</button>
-          </Link>
+          <button
+            type="submit"
+            className="button is-black"
+          >Edit Movie</button>
           <Link to="/">
             <button
               id="link-register-reg"
               className="button is-white"
-              style="border-color:grey;"
+              style={{ borderColor: "grey" }}
             >
               Cancel
             </button>

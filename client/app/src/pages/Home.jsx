@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import { MovieCard, SeriesCard, AddMovie } from '../components/index.js'
+import { MovieCard, SeriesCard } from '../components/index.js'
 import { Link } from 'react-router-dom'
 
 const Home = () => {
@@ -29,9 +29,6 @@ const Home = () => {
   if (loading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
 
-  const showMovies = () => {
-
-  }
   return (
     <div className="container is-max-desktop">
       <div className="box">
@@ -60,24 +57,6 @@ const Home = () => {
             </Link>
           </div>
         </nav>
-        <div className="columns is-centered">
-          <div className="column" style={{ marginLeft: "150px" }}>
-            <p className="title is-4">
-              Movies
-            </p>
-            <div>
-              <img className="" style={{ hover: "red" }} src="https://pbs.twimg.com/media/ED6DfG5U8AUk6j5.jpg" alt="movies" width="200px" height="500px" />
-            </div>
-          </div>
-          <div className="column" style={{ marginLeft: "50px" }}>
-            <p className="title is-4">
-              Series
-            </p>
-            <div>
-              <img className="" src="https://bostonglobe-prod.cdn.arcpublishing.com/resizer/ze-3rhOFVa3jLGT76Fy6JUPNsGw=/1280x0/arc-anglerfish-arc2-prod-bostonglobe.s3.amazonaws.com/public/G4SDN65E6JBI5CX2XXLVIIJIEI.jpeg" alt="series" width="200px" height="500px" />
-            </div>
-          </div>
-        </div>
         <h1 className="title is-3">Movies</h1>
         <div class="column is-main-content">
           <div class="container is-widescreen">

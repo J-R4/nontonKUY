@@ -25,6 +25,7 @@ const resolvers = {
     },
     movie: async (_, args) => {
       try {
+        await redis.del('movie:data')
         const mvData = await redis.get('movie:data')
         if (mvData) {
           return JSON.parse(mvData)
@@ -45,7 +46,6 @@ const resolvers = {
   Mutation : {
     createMovie: async (_, args) => {
       try {
-        console.log('masukk try')
         await redis.del('movies:data')
         await redis.del('movie:data')
         const { title, overview, poster_path, popularity, tags } = args

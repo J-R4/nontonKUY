@@ -26,10 +26,18 @@ const SeriesCard = (props) => {
               {series.overview}
             </p>
             <p className="subtitle is-7">
-              Popularity : {series.popularity}
+              {series.popularity} / 5 <i className="fas fa-star" aria-hidden="true"></i>
             </p>
             <p className="subtitle is-7">
-              tags : {series.tags}
+              tags : {
+                series.tags.map((el, i) => {
+                  if (i === series.tags.length - 1) {
+                    return `${el}`
+                  } else {
+                    return `${el}, `
+                  }
+                })
+              }
             </p>
           </div>
         </div>
