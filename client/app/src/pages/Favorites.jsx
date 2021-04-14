@@ -6,7 +6,7 @@ import { addFavorite } from '../config/var.js'
 
 const Favorites = () => {
   const getFav = useReactiveVar(addFavorite)
-
+  console.log(getFav)
   return (
     <>
       <div className="container is-max-desktop">
@@ -24,9 +24,9 @@ const Favorites = () => {
             <div class="container is-widescreen">
               <div className="columns is-centered is-multiline" style={{ padding: "20px" }}>
                 {
-                  getFav.map(el => {
+                  getFav.length ? getFav.map(el => {
                     return <MovieCard movie={el} key={el._id}></MovieCard>
-                  })
+                  }) : <h1>You doesnt have any favorite, add it first at Home :) </h1>
                 }
               </div>
             </div>
