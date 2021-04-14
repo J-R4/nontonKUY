@@ -6,14 +6,14 @@ module.exports = {
     },
     {
       name: "entertainme - Orchestrator",
-      script: "cd server/orchestrator &&  nodemon index.js",
+      script: "cd server/orchestrator && npm install &&  nodemon index.js",
       env: {
         PORT: 4000,
       },
     },
     {
       name: "entertainme - Service Movies",
-      script: "cd server/services/movies && nodemon app.js",
+      script: "cd server/services/movies && npm install && nodemon app.js",
       env: {
         DATABASE_NAME: "entertainme",
         COLLECTION_NAME: "movies",
@@ -22,7 +22,7 @@ module.exports = {
     },
     {
       name: "entertainme - Service TV Series",
-      script: "cd server/services/series && nodemon app.js",
+      script: "cd server/services/series && npm install && nodemon app.js",
       env: {
         DATABASE_NAME: "entertainme",
         COLLECTION_NAME: "series",
