@@ -8,7 +8,7 @@ module.exports = {
         },
         {
             name: 'entertainme - Orchestrator',
-            script: 'cd server/orchestrator && npm install &&  node index.js',
+            script: 'cd server/orchestrator && npm install &&  node app.js',
             env: {
                 PORT: 4000,
             },
